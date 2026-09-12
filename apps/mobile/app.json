@@ -1,0 +1,18 @@
+{
+  "expo": {
+    "name": "PhaseGuard",
+    "slug": "phaseguard",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "updates": {
+      "fallbackToCacheTimeout": 0
+    },
+    "assetBundlePatterns": ["**/*"],
+    "ios": {
+      "bundleIdentifier": "com.phaseguard.mobile"
+    },
+    "android": {
+      "package": "com.phaseguard.mobile"
+    }
+  }
+}

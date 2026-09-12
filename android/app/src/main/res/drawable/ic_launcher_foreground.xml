@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="108dp"
+    android:height="108dp"
+    android:viewportWidth="108"
+    android:viewportHeight="108">
+    <!-- Simple shield glyph, centered in the 66dp safe zone -->
+    <path
+        android:fillColor="#4C8DFF"
+        android:pathData="M54,21 L78,30 V52 C78,68 68,79 54,87 C40,79 30,68 30,52 V30 Z" />
+    <path
+        android:fillColor="#0B1220"
+        android:pathData="M54,30 L71,36.5 V52 C71,64 63.5,72.5 54,78.5 C44.5,72.5 37,64 37,52 V36.5 Z" />
+    <path
+        android:fillColor="#4C8DFF"
+        android:pathData="M48,52 L52,58 L64,44 L67,47 L52,65 L45,55 Z" />
+</vector>

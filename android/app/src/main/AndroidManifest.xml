@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <!-- ================================================================
+         INTERNET & NETWORK
+         Required for WebSocket connection to /ws/call/{call_id} endpoint.
+         ================================================================ -->
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+
+    <!-- ================================================================
+         MICROPHONE — Runtime permission (dangerous)
+         Required for AudioRecord. Requested with rationale dialog on first
+         launch. AudioSource.MIC / VOICE_RECOGNITION only — never VOICE_CALL.
+         ================================================================ -->
+    <uses-permission android:name="android.permission.RECORD_AUDIO" />
+
+    <!-- ================================================================
+         PHONE STATE — Runtime permissions (dangerous)
+         Used ONLY for call state detection (IDLE/RINGING/OFFHOOK) via
+         TelephonyManager. Does NOT grant call audio access.
+
+         READ_PHONE_STATE     : required on API 26–32
+         READ_BASIC_PHONE_STATE : lower-privilege replacement on API 33+
+                                  (no carrier/IMEI access)
+         Both are requested at runtime with a rationale dialog.
+         ================================================================ -->
+    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
+    <uses-permission
+        android:name="android.permission.READ_BASIC_PHONE_STATE"
+        android:minSdkVersion="33" />
+
+    <!-- ================================================================
+         FOREGROUND SERVICE — Required for persistent protection service.
+         FOREGROUND_SERVICE_MICROPHONE : Required on API 34+ when the
+         foreground service type is "microphone". Declared here so the
+         manifest is valid across all targetSdk levels.
+         ================================================================ -->
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE_MICROPHONE" />
+
+    <!-- ================================================================
+         BOOT — Restart service after device reboot if protection was active.
+         ================================================================ -->
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+
+    <!-- ================================================================
+         BATTERY OPTIMIZATION — Request Doze exemption so the foreground
+         service is not throttled during long calls. User must explicitly
+         grant this; we deep-link to the correct OEM settings page.
+         ================================================================ -->
+    <uses-permission android:name="android.permission.REQUEST_IGNORE_BATTERY_OPTIMIZATIONS" />
+
+    <!-- ================================================================
+         POST_NOTIFICATIONS — Required on API 33+ to show the persistent
+         protection notification and the "protection stopped" alert.
+         ================================================================ -->
+    <uses-permission
+        android:name="android.permission.POST_NOTIFICATIONS"
+        android:minSdkVersion="33" />
+
+    <!-- ================================================================
+         READ_CONTACTS — Optional runtime permission.
+         Used ONLY to check whether an incoming call's number is saved in
+         the user's contacts, so we can surface a prominent protection
+         prompt only for unknown callers.
+
+         We do NOT read, store, or transmit the contact list itself.
+         We do NOT access contact names, email addresses, or any other
+         contact fields — only PhoneLookup (does number exist? yes/no).
+
+         If this permission is denied, we fall open: the protection prompt
+         is shown for all incoming calls (never silently hidden).
+         ================================================================ -->
+    <uses-permission android:name="android.permission.READ_CONTACTS" />
+
+    <application
+        android:name=".VoxShieldApplication"
+        android:allowBackup="false"
+        android:dataExtractionRules="@xml/data_extraction_rules"
+        android:fullBackupContent="@xml/backup_rules"
+        android:icon="@mipmap/ic_launcher"
+        android:label="@string/app_name"
+        android:roundIcon="@mipmap/ic_launcher_round"
+        android:supportsRtl="true"
+        android:theme="@style/Theme.VoxShield"
+        tools:targetApi="31">
+
+        <!-- ============================================================
+             MAIN ACTIVITY
+             ============================================================ -->
+        <activity
+            android:name=".MainActivity"
+            android:exported="true"
+            android:launchMode="singleTop"
+            android:windowSoftInputMode="adjustResize">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+
+        <!-- ============================================================
+             FOREGROUND SERVICE — VoxShield Protection Service
+             foregroundServiceType="microphone" is mandatory on API 29+
+             when AudioRecord is used inside the service. The system will
+             enforce this on API 34+ and reject services without it.
+             ============================================================ -->
+        <service
+            android:name=".service.VoxShieldForegroundService"
+            android:exported="false"
+            android:foregroundServiceType="microphone"
+            android:stopWithTask="false" />
+
+        <!-- ============================================================
+             BOOT RECEIVER — Restart service on device boot
+             ============================================================ -->
+        <receiver
+            android:name=".service.ServiceHeartbeatReceiver"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
+                <action android:name="com.voxshield.action.HEARTBEAT" />
+                <action android:name="com.voxshield.action.PROTECTION_STOPPED" />
+            </intent-filter>
+        </receiver>
+
+    </application>
+
+</manifest>

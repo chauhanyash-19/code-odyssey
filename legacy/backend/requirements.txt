@@ -1,0 +1,48 @@
+# PhaseGuard API — Python dependencies
+# Python 3.11+
+
+# ── Web framework ──────────────────────────────────────────────────────────────
+fastapi==0.115.5
+uvicorn[standard]==0.32.1
+websockets==13.1
+python-multipart==0.0.12
+
+# ── Config / validation ────────────────────────────────────────────────────────
+pydantic==2.10.3
+pydantic-settings==2.6.1
+
+# ── Auth ───────────────────────────────────────────────────────────────────────
+python-jose[cryptography]==3.3.0
+
+# ── Rate limiting ──────────────────────────────────────────────────────────────
+slowapi==0.1.9
+
+# ── DSP / numerics ─────────────────────────────────────────────────────────────
+numpy==2.2.0
+scipy==1.14.1
+
+# ── AI / LLM ──────────────────────────────────────────────────────────────────
+groq==0.12.0
+httpx==0.28.1
+
+# ── Search ─────────────────────────────────────────────────────────────────────
+tavily-python==0.5.0
+
+# ── Forensics / PDF ───────────────────────────────────────────────────────────
+reportlab==4.2.5
+matplotlib==3.9.4
+Pillow==11.1.0
+
+# ── Language detection (i18n) ─────────────────────────────────────────────────
+langdetect==1.0.9
+
+# ── SMS (escalation) ──────────────────────────────────────────────────────────
+twilio==9.4.0
+
+# ── Secret management ─────────────────────────────────────────────────────────
+# Optional: doppler-sdk / infisical-python for non-dev environments
+# Included as optional extras — install separately if needed
+
+# ── Dev / testing ──────────────────────────────────────────────────────────────
+pytest==8.3.4
+pytest-asyncio==0.24.0

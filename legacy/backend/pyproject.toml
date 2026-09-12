@@ -1,0 +1,18 @@
+[tool.poetry]
+name = "phaseguard-api"
+version = "2.0.0"
+description = "PhaseGuard Anti-Scam OS — Backend API"
+authors = ["PhaseGuard Team"]
+readme = "README.md"
+packages = [{include = "apps/api"}]
+
+[tool.poetry.dependencies]
+python = "^3.11"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
+
+[tool.pytest.ini_options]
+asyncio_mode = "auto"
+testpaths = ["tests"]
