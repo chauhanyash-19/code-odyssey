@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PhaseGuard OS | Real-time Anti-Scam Interception</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="app-container">
+        <!-- Sidebar Navigation -->
+        <aside class="sidebar">
+            <div class="brand">
+                <div class="logo"></div>
+                <h1>PhaseGuard</h1>
+                <span class="badge">Live</span>
+            </div>
+            <nav class="menu">
+                <a href="#" class="active"><i class="icon-monitor"></i> Dashboard</a>
+                <a href="#"><i class="icon-dossier"></i> Dossiers</a>
+                <a href="#"><i class="icon-settings"></i> Settings</a>
+            </nav>
+            <div class="connection-status" id="connection-status">
+                <span class="status-indicator disconnected"></span>
+                <span class="status-text">System Idle</span>
+            </div>
+        </aside>
+
+        <!-- Main Workspace -->
+        <main class="workspace">
+            <header class="topbar">
+                <h2>Active Interception Stream</h2>
+                <div class="actions">
+                    <button id="btn-simulate" class="btn primary">Simulate Call</button>
+                    <button id="btn-deploy-scambaiter" class="btn warning hidden">Deploy Scambaiter</button>
+                    <button id="btn-generate-dossier" class="btn secondary hidden">1930 Dossier</button>
+                </div>
+            </header>
+
+            <div class="grid-layout">
+                <!-- Top Row: Audio Visualizer & Realtime Verdict -->
+                <section class="panel glass visualizer-panel">
+                    <div class="panel-header">
+                        <h3><span class="live-dot"></span> Audio Spectrum Analysis</h3>
+                        <span class="meta-text" id="call-id-display">Waiting for stream...</span>
+                    </div>
+                    <div class="visualizer-container">
+                        <canvas id="audio-visualizer"></canvas>
+                        <div class="overlay-verdict" id="final-verdict-overlay">SAFE</div>
+                    </div>
+                </section>
+
+                <!-- PRIMARY ROW: Fact-Checker (full width, hero) -->
+                <section class="panel glass factcheck-panel primary-panel">
+                    <div class="panel-header">
+                        <h3>Real-Time Fact-Checker &amp; Claim Analysis</h3>
+                        <span class="spinner hidden" id="factcheck-spinner"></span>
+                        <span class="primary-badge">Primary Detection Engine</span>
+                    </div>
+                    <div class="transcript-box" id="transcript-box">
+                        <div class="placeholder">Waiting for speech...</div>
+                    </div>
+                    <div class="verdict-banner" id="verdict-banner">
+                        No claims detected yet.
+                    </div>
+                </section>
+
+                <!-- SECONDARY ROW: DSP Engine (experimental, collapsible) -->
+                <details class="panel glass dsp-panel experimental-panel" id="dsp-section">
+                    <summary class="panel-header">
+                        <h3>Voice Deepfake Engine (Bispectrum + Tremor)</h3>
+                        <span class="experimental-badge" title="Real-world validation showed overlapping results vs gTTS. Not reliable as standalone. Use as supplementary signal only.">&#9881; Experimental &mdash; Under Development</span>
+                    </summary>
+                    <div class="experimental-notice" id="dsp-notice">
+                        DSP voice detection is <strong>disabled</strong> in this build.<br>
+                        <code>DSP_VOICE_DETECTION_ENABLED=true</code> to enable for research.
+                    </div>
+                    <div class="gauges" id="dsp-gauges" style="display:none">
+                        <div class="gauge-card">
+                            <h4>Bispectrum PDI</h4>
+                            <div class="gauge-value" id="pdi-value">0.0000</div>
+                            <div class="progress-bar"><div class="fill" id="pdi-fill"></div></div>
+                            <div class="gauge-label" id="pdi-label">Human</div>
+                        </div>
+                        <div class="gauge-card">
+                            <h4>Physiological Tremor</h4>
+                            <div class="gauge-value" id="tremor-value">0.0000</div>
+                            <div class="progress-bar"><div class="fill" id="tremor-fill"></div></div>
+                            <div class="gauge-label" id="tremor-label">Baseline</div>
+                        </div>
+                    </div>
+                    <div class="ensemble-result" id="dsp-ensemble" style="display:none">
+                        <span class="label">Ensemble Fusion:</span>
+                        <span class="value" id="ensemble-label">UNKNOWN</span>
+                    </div>
+                </details>
+
+            </div>
+        </main>
+    </div>
+
+    <script src="app.js"></script>
+    <script>
+    // Handle DSP enabled/disabled from backend
+    document.addEventListener('ws:connected', function(e) {
+        const dspEnabled = e.detail && e.detail.dsp_enabled;
+        const dspSection = document.getElementById('dsp-section');
+        const dspNotice = document.getElementById('dsp-notice');
+        const dspGauges = document.getElementById('dsp-gauges');
+        const dspEnsemble = document.getElementById('dsp-ensemble');
+        if (dspEnabled) {
+            dspNotice.style.display = 'none';
+            dspGauges.style.display = '';
+            dspEnsemble.style.display = '';
+        } else {
+            dspNotice.style.display = '';
+            dspGauges.style.display = 'none';
+            dspEnsemble.style.display = 'none';
+        }
+    });
+    </script>
+</body>
+</html>
